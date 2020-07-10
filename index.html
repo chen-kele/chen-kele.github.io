@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>提取ris文件专利号</title>
+</head>
+<body>
+    <p>请选择待提取的ris文件：</p>
+    <input type="file" onchange="handlefile(this)"/>
+    <hr>
+    <p id="demo"></p>
+    <script>
+        function handlefile(node){
+            console.log(node.files[0]);
+            var fr = new FileReader();
+            fr.readAsText(node.files[0]);
+            fr.onload=function(e){
+                words = e.target.result;
+                let word_list=words.split('\n');
+                let new_word_list = [];
+                for (let word of word_list){
+                    word=word.trim();
+                    if (word != '' && word.startsWith("IS")){
+                        new_word_list.push(word.split('-')[1].trim())
+                    }
+                }
+                new_word = new_word_list.join('<br/>');
+				new_word = '共提取得到' + new_word_list.length + '个专利号：<br/><br/>' + new_word;
+                document.getElementById("demo").innerHTML = new_word;
+            }
+        }
+
+    </script>
+</body>
+</html>
